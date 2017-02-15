@@ -1,9 +1,5 @@
 /* Universe.java
  *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  * Contains information about a Universe
  */
 
@@ -16,7 +12,7 @@ public class Universe
    private int clusterLocation   = -1;                                               // Where does this Universe exist in the cluster?   
    private int energy            = SpaceFightConfig.STARTING_ENERGY;
    private boolean isDestroyed   = false;
-   private int numPlanets        = SpaceFightConfig.PLANETS_PER_UNIVERSE; 
+   private int numPlanets        = SpaceFightConfig.DEFAULT_PLANETS_PER_UNIVERSE; 
    private int playerId          = -1;                                        // Keeps track of which player this is.  Starts at 0
    private int timesShielded     = 0;                                         // Everytime you shield
    private boolean shieldsUp     = false;
@@ -142,7 +138,7 @@ public class Universe
    public boolean setLocation(int loc)
    {
       
-      if (loc >= 0 && loc < SpaceFightConfig.NUM_UNIVERSES)
+      if (loc >= 0 && loc < SpaceFight.getNumUniverses())
       {
          clusterLocation = loc;
       
@@ -158,7 +154,7 @@ public class Universe
    
    public boolean setPlayer(int p)
    {
-      if (p >= 0 && p < SpaceFightConfig.NUM_UNIVERSES)
+      if (p >= 0 && p < SpaceFight.getNumUniverses())
       {
          playerId = p;
          return true;

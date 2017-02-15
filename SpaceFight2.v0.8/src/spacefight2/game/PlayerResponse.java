@@ -1,10 +1,5 @@
 /* PlayerResponse
  *
- *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  * The opposite of giving a turn -- this is the object that stores what a command has done
  */
  
@@ -135,7 +130,7 @@ public class PlayerResponse {
    
    public boolean setTarget(int t)
    {
-      if (t >= 0 && t < SpaceFightConfig.NUM_UNIVERSES)
+      if (t >= 0 && t < SpaceFight.getNumUniverses())
       {
          target = t;
          return true;

@@ -3,10 +3,6 @@
  * AI for SpaceFight2.  
  * He just wants to pew pew pew.
  *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  */
 
 package spacefight2.players;
@@ -51,7 +47,7 @@ public class Player0 {
          command.setAction("shields");
          return command;
       }
-      else  // We're going to shoot.  We like shooting.
+     else  // We're going to shoot.  We like shooting.
       {
          command.setAction("shoot");
          
@@ -66,7 +62,7 @@ public class Player0 {
             // Here's how we find a random target
             while (currentTarget == -1)
             {
-               potentialTarget = (int)(Math.random() * SpaceFightConfig.NUM_UNIVERSES);    // Will generate between 0 and 1 below max
+               potentialTarget = (int)(Math.random() * getNumUniverses());    // Will generate between 0 and 1 below max
       
                // Make sure we don't shoot ourselves--yes it is allowed
                if (potentialTarget == myUniverse.getLocation())

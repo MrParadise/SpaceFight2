@@ -1,10 +1,5 @@
 /*  UniverseConfig
  *
- *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  * Holds all the config info for SpaceFight2.  Change settings here to affect game play!
  *
  */
@@ -21,8 +16,8 @@ public class SpaceFightConfig {
    
    // Lots of properties...
    public static final String ANONYMOUS_COWARD        = new String("Anonymous Coward");// Used when playerName isn't set
-   public static final int NUM_UNIVERSES              = 10;                             // How many worlds can exist.  Note universeId 0 <= x < this max
-   public static final int PLANETS_PER_UNIVERSE       = 3;                             // Planets == lives.  3 is default
+   public static final int DEFAULT_PLANETS_PER_UNIVERSE       = 3;                             // Planets == lives.  3 is default
+   public static final int DEFAULT_NUM_UNIVERSES              = 12;                             // How many worlds can exist.  Note universeId 0 <= x < this max   
    public static final int STARTING_ENERGY            = 25;                            // How many you start w/and after planet death.  25 is default
    public static final int ENERGY_PER_ROUND           = 10;                            // How much energy is given per round.  Changes strategy a lot!
    public static final int MAX_ROUNDS                 = 1000;                          // Used to bail out continuous mode
@@ -30,7 +25,7 @@ public class SpaceFightConfig {
    
    // Now all of our commands and their costs
    public static final String[] ACTIONS_LIST    = {"shoot", "shields", "absorb"};
-   public static final int ACTION_ABSORB_COST   = 5;          // 50% chance to instead absorb all damage   
+   public static final int ACTION_ABSORB_COST   = 2;          // 50% chance to instead absorb all damage   
    public static final int ACTION_SHIELDS_COST  = 5;          // Guaranteed to deal half damage, 25% chance to deal none.
    public static final int ACTION_SHOOT_COST    = 1;          // Nominal for now
    

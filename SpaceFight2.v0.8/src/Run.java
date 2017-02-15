@@ -1,43 +1,81 @@
 /* Main
  *
- *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  * Runs Space Fight 2 really by johnny paradise but we're gonna say Simon B presents because Simon B is pretty awesome and swell and did actually name it so it's kinda an omage and a nod to the artistic side that I totally could not have done--it would have been something stupid and no one would like it because all I do is run on and on and on for no reason.  If you quietly tell me turtle I'll give you 30 points next semester.
  * pew pew pew
  */
+package spacefight2.game;
 
 import spacefight2.game.*;
 import spacefight2.players.*;
 import java.util.Scanner;
 
-
+ 
 public class Run 
 {
+ 
    public static void main(String args[])
    {
       // Local vars
       String commandStr    = new String();
       Integer commandInt   = new Integer(0);
       Scanner input        = new Scanner(System.in);
-      int numPlayers       = 2;                          // Change this to the number of players!
+      int numPlayers       = 0;     //= 3;                          // Change this to the number of players!
       int ties             = 0;
       int winnerId;
-      int[] winners        = new int[numPlayers];
-
+      int playerType       =0;
+      int playerNumber     =0;
+      String playerAdd     = new String();
+      String playerNumberString = new String();
       // Create the game
       SpaceFight game = new SpaceFight();     // Create a game w/30 Universes
-      
-         
       // Add in players
-      //
+   
+      while (playerType == 0){
+         System.out.println("how many players do you want in the game?");
+         playerNumberString = input.nextLine();
+         numPlayers = Integer.valueOf(playerNumberString);//how amny do you want
+         while(playerType < numPlayers){
+            System.out.println("what should player " + playerType + " be?");
+            playerAdd= input.nextLine();//what are they
+            int playerVariable = Integer.valueOf(playerAdd);
+            if (playerVariable == 0){//this adds player zero
+               game.addPlayer("Player0");
+               playerType = playerType+1;
+            }
+            else if(playerVariable == 1){
+               game.addPlayer("Player1");//and this one adds player one
+               playerType = playerType+1;
+            
+            
+            }
+            else if(playerVariable == 2){
+               game.addPlayer("Player2");//this one adds player two
+               playerType = playerType+1;
+            
+            
+            }
+            else if(playerVariable == 3){
+               game.addPlayer("ParkerGuyot");//this one is stupid and shouldnt be added, thank parker
+               playerType = playerType + 1;
+            }
+            else{
+               System.out.println("please put only 0, 1, or 2.");
+            }
+         
+         }
+               
+         playerType = 1;
+      }
+      int[] winners        = new int[numPlayers];
+   
+            //
       for (int i = 0; i < numPlayers; i++)
          winners[i] = 0;
-         
+       /*  
       game.addPlayer("Player0");
       game.addPlayer("Player1");  
+      game.addPlayer("Player2");  */
+   
      
       // Set how many games we're going to play
       System.out.println("Please select simulation parameters.  Hit enter for defaults.");
@@ -106,4 +144,3 @@ public class Run
       System.out.println("Ties: " + Integer.toString(ties));
    }
 } 
- 

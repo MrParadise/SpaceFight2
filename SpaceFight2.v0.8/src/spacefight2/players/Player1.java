@@ -3,11 +3,6 @@
  * AI for SpaceFight2.  
  * She just wants to keep shields up and then blam.
  *
- *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  */
 
 package spacefight2.players;
@@ -68,7 +63,7 @@ public class Player1 {
             // Find a target that isn't us
             while (target == -1)
             {
-               potentialTarget = (int)(Math.random() * SpaceFightConfig.NUM_UNIVERSES);               
+               potentialTarget = (int)(Math.random() * getNumUniverses());               
                if (potentialTarget == u.getLocation())   // We don't want to shoot ourselves
                   continue;
                else
