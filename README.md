@@ -1,2 +1,2 @@
 # SpaceFight2
-Fighting in space. Presented by simon burgerclick. dont ask abou the first one.
+Fighting in space. Presented by Simon Burgerclick. Don't ask about the first one.
