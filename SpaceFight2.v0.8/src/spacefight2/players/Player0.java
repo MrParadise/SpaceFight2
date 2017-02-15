@@ -2,6 +2,10 @@
  *
  * AI for SpaceFight2.  
  * He just wants to pew pew pew.
+ *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
+ *
+ *This program is licensed under the GPL.  Please see COPYING for more information.
+ *
  *
  */
 

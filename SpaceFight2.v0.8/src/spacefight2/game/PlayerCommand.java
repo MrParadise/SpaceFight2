@@ -1,6 +1,11 @@
 /* PlayerCommand
  *
  * The thing a player is going to do
+  * The thing a player is going to do*
+ *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
+ *
+ *This program is licensed under the GPL.  Please see COPYING for more information.
+ *
  */
 
 package spacefight2.game;
