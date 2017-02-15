@@ -2,6 +2,11 @@
  *
  * AI for SpaceFight2.  
  * She just wants to keep shields up and then blam.
+ *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
+ *
+ *This program is licensed under the GPL.  Please see COPYING for more information.
+ *
+
  *
  */
 
