@@ -2,6 +2,11 @@
  *
  * Runs Space Fight 2 really by johnny paradise but we're gonna say Simon B presents because Simon B is pretty awesome and swell and did actually name it so it's kinda an omage and a nod to the artistic side that I totally could not have done--it would have been something stupid and no one would like it because all I do is run on and on and on for no reason.  If you quietly tell me turtle I'll give you 30 points next semester.
  * pew pew pew
+  * The thing a player is going to do*
+ *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
+ *
+ *This program is licensed under the GPL.  Please see COPYING for more information.
+ *
  */
 package spacefight2.game;
 
