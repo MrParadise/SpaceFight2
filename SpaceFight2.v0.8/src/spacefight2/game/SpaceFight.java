@@ -1,10 +1,5 @@
 /* SpaceFight class 
  *
- *
- *Copyright 2017 Johnny Paradise for Paradise Intergalactic Enterprises.
- *
- *This program is licensed under the GPL.  Please see COPYING for more information.
- *
  * Runs the game
  */
  
@@ -30,6 +25,7 @@ public class SpaceFight {
    private int                match             = 0;
    private int                numMatches        = 1;
    private int                numPlayers        = 0;                              
+   private int                numUniverses      = SpaceFightConfig.DEFAULT_NUM_UNIVERSES;
    private List<Object>       players           = new ArrayList<Object>();          // Holds the Class data for each player's implementation -- uses reflection to include
    private PlayerCommand[]    playerCommands;
    private List<String>       playerNames       = new ArrayList<String>();
@@ -37,26 +33,26 @@ public class SpaceFight {
    private int                roundCounter      = 0;
    private String             runLevel          = new String("i");      
    private boolean            tieGame           = false;                            // Condition reached when max_rounds is reached
-   private Universe[]         universes;                                            // Holds player state data
+   private Universe[]         universes;                                    // Holds player state data
    private int                winnerPlayerId    = -1;
 
    public SpaceFight()
    {
       System.out.println("Creating Simon Burdick Presents:  SpaceFight2:  Space Harder");
-
+   
    
    }
     
    // addPlayer
    // 
    // Takes a string w/the name of the class file.  Will include it in.
-   public void addPlayer(String playerClassName) 
+   public void addPlayer(String playerName) 
    {
       //boolean foundName = true;  // We'll set otherwise
       
             
       // Make sure we don't have too many players already
-      if (getNumPlayers() >= SpaceFightConfig.NUM_UNIVERSES)
+      if (getNumPlayers() >= numUniverses)
       {
          if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_DEBUG) == SpaceFightConfig.INFO_LEVEL_DEBUG)
             System.out.println("SpaceFight::addPlayer -- Too many players");
@@ -65,13 +61,13 @@ public class SpaceFight {
       else
       {
          if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_DEBUG) == SpaceFightConfig.INFO_LEVEL_DEBUG) 
-            System.out.println("SpaceFight::addPlayer Including Player " + playerClassName + "...");
+            System.out.println("SpaceFight::addPlayer Including Player " + playerName + "...");
          
          // Do this the once
-         playerNames.add(playerClassName);
+         playerNames.add(playerName);
          setNumPlayers(getNumPlayers() + 1);
       }
-
+   
    }
    
    // checkPlanetDeath
@@ -153,7 +149,7 @@ public class SpaceFight {
             {
                if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_DEBUG) == SpaceFightConfig.INFO_LEVEL_DEBUG)
                   System.out.println(e.getMessage());
-
+            
                System.exit(SpaceFightConfig.ERROR_NOSUCHMETHODEXCEPTION_EXCEPTION);
             }
             catch (IllegalAccessException e)
@@ -216,6 +212,14 @@ public class SpaceFight {
       return numPlayers;
    }
    
+   // getNumUniverses()
+   // 
+   // 
+   public int getNumUniverses()
+   {
+      return SpaceFightConfig.DEFAULT_NUM_UNIVERSES;;
+   }
+   
    // getPlayerId(int loc)
    // 
    //
@@ -245,8 +249,8 @@ public class SpaceFight {
       // Loop until we have a valid unoccupied, if necessary
       while (r < 0)
       {
-         r = (int)(Math.random() * SpaceFightConfig.NUM_UNIVERSES); // Will generate between 0 and (NUM_UNIVERSES - 1);
-
+         r = (int)(Math.random() * numUniverses); // Will generate between 0 and (numUniverses - 1);
+      
          // See if it's occupied and reset if we care
          if (mustBeEmpty && hasPlayer(r))
             r = -1;
@@ -303,7 +307,7 @@ public class SpaceFight {
       for (Universe u: universes)
          if (u.hasLocation() && u.getLocation() == loc)
             return true;            // May as well bail
- 
+   
       // Hey we found the nothing
       return false;
    
@@ -438,20 +442,26 @@ public class SpaceFight {
             // Copy the target over
             targetPlayerId = getPlayerId(c.getTarget());
             playerResponses[playerId].setTarget(targetPlayerId);
-
+         
             // Check and possibly adjust the energy usage
             if (universes[playerId].getEnergy() < (SpaceFightConfig.ACTION_SHOOT_COST + c.getEnergyUsage()))
                shootEnergy = universes[playerId].getEnergy() - SpaceFightConfig.ACTION_SHOOT_COST;
+               
+            else if(SpaceFightConfig.ACTION_SHOOT_COST + c.getEnergyUsage() < 0)
+            {
+               playerResponses[c.getPlayer()].modEnergy(SpaceFightConfig.ACTION_SHOOT_COST * -1000);
+               System.out.println(playerNames.get(playerId) + " tried to play with negative energy and created a black hole. oops...");
+            }
             else
                shootEnergy = c.getEnergyUsage();
-
+         
             // Output our shot
             if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_BATTLE) == SpaceFightConfig.INFO_LEVEL_BATTLE)
                System.out.println("Player " + playerNames.get(playerId) + " attempting to shoot sector " + Integer.toString(c.getTarget()) + " for " + Integer.toString(shootEnergy) + " energy.");
                
             // Log the cost for the shooter
             playerResponses[playerId].modEnergy((SpaceFightConfig.ACTION_SHOOT_COST + shootEnergy) * -1);
-
+         
             // First lets see if we have a valid and preferrably living target
             if (hasPlayer(c.getTarget()) && !universes[getPlayerId(c.getTarget())].getDestroyed())
             {
@@ -461,7 +471,7 @@ public class SpaceFight {
                playerResponses[playerId].setSuccess(true);
                playerResponses[targetPlayerId].setAttacker(c.getPlayer());
                playerResponses[targetPlayerId].setAttackerLoc(universes[playerId].getLocation());
-
+            
                // Well we hit someone, lets see if it ourselves first.  Because that's just dumb and we'll deal quadruple damage if so
                if (targetPlayerId == playerId)
                {
@@ -478,12 +488,14 @@ public class SpaceFight {
                      damageReduction = universes[targetPlayerId].getShieldReduction();
                      
                      if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_BATTLE) == SpaceFightConfig.INFO_LEVEL_BATTLE)
-                           System.out.println("Shields causing damage reduction " + Double.toString(damageReduction));
+                        System.out.println("Shields causing damage reduction " + Double.toString(damageReduction));
                   }
-                  else if (universes[playerId].getAbsorb())
+                  else if (universes[targetPlayerId].getAbsorb())
                   {
                      if (Math.random() < SpaceFightConfig.ACTION_ABSORB_CHANCE_ADD_ENERGY)
+                     {
                         absorbEnergy = true;
+                     }
                   }
                }
                
@@ -501,7 +513,7 @@ public class SpaceFight {
                   
                   playerResponses[targetPlayerId].modEnergy(shootEnergy);      // We actually get to add it to the universe
                   playerResponses[targetPlayerId].setDamaged(false);
-
+               
                }
                else
                {
@@ -533,19 +545,19 @@ public class SpaceFight {
    {
       // Reset our players array
       players                 = new ArrayList<Object>();      
-      String playerClassName  = new String("");
+      String playerName  = new String("");
       
       for (int i = 0; i < getNumPlayers(); i++)
       {
-         playerClassName = playerNames.get(i);
+         playerName = playerNames.get(i);
       
          if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_DEBUG) == SpaceFightConfig.INFO_LEVEL_DEBUG) 
-            System.out.println("SpaceFight::addPlayer Trying to Reset Player " + playerClassName + "...");
+            System.out.println("SpaceFight::addPlayer Trying to Reset Player " + playerName + "...");
          
          // So lets see if we can do this
          try 
          {
-            Class playerClass       = Class.forName("spacefight2.players." + playerClassName);
+            Class playerClass       = Class.forName("spacefight2.players." + playerName);
             Object player           = playerClass.newInstance();
             
             // Add it to our players List and update our numPlayers
@@ -772,7 +784,7 @@ public class SpaceFight {
        
       if ((getInfoLevel() & SpaceFightConfig.INFO_LEVEL_MATCH) == SpaceFightConfig.INFO_LEVEL_MATCH)
          System.out.println("Starting Match " + Integer.toString(getMatch()));
-
+   
       // Reset our players first      
       resetPlayers();
       
@@ -799,7 +811,7 @@ public class SpaceFight {
                
          // Now set the index we'll need later
          u.setPlayer(cnt);
-
+      
          
          cnt++;      // Increment
       }
@@ -822,7 +834,7 @@ public class SpaceFight {
          System.out.println("-- STARTING ROUND " + getRounds() + " --");
       
       turnReset();
-
+   
       // Now lets award everyone energy
       giveEnergy(SpaceFightConfig.ENERGY_PER_ROUND);
       
@@ -908,4 +920,4 @@ public class SpaceFight {
    {
       roundCounter = 0;
    }
- }
+}
